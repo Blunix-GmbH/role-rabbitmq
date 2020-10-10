@@ -1,0 +1,26 @@
+- name: install rabbitmq-server
+  apt:
+    name: rabbitmq-server
+    state: present
+
+- name: template /etc/rabbitmq/rabbitmq-env.conf
+  template:
+    src: templates/etc/rabbitmq/rabbitmq-env.conf.j2
+    dest: /etc/rabbitmq/rabbitmq-env.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart rabbitmq-server
+
+- name: manage rabbitmq users
+  rabbitmq_user:
+    user: "{{ rabbitmq_user['name'] }}"
+    password: "{{ rabbitmq_user['password'] }}"
+    vhost: "{{ rabbitmq_user['vhost'] }}"
+    configure_priv: "{{ rabbitmq_user['configure_priv'] }}"
+    read_priv: "{{ rabbitmq_user['read_priv'] }}"
+    write_priv: "{{ rabbitmq_user['write_priv'] }}"
+    state: present
+  with_items: "{{ rabbitmq_users }}"
+  loop_control:
+    loop_var: rabbitmq_user

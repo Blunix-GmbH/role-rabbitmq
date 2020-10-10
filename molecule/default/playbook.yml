@@ -1,0 +1,27 @@
+- name: Converge
+  hosts: all
+  become: True
+  roles:
+    - role: role-rabbitmq
+  vars:
+    # all variables here are set to the values in defaults/main.yml
+    rabbitmq_conf_nodename: rabbit
+    rabbitmq_conf_node_ip_address: 127.0.0.1
+    rabbitmq_conf_node_port: 5672
+
+    # manage users
+    rabbitmq_users:
+      - name: molecule
+        state: present
+        password: secret
+        vhost: /
+        configure_priv: .*
+        read_priv: .*
+        write_priv: .*
+      - name: dr_evil
+        state: absent
+        password: secret
+        vhost: /
+        configure_priv: .*
+        read_priv: .*
+        write_priv: .*

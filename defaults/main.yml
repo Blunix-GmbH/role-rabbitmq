@@ -1,0 +1,5 @@
+rabbitmq_conf_nodename: rabbit
+rabbitmq_conf_node_ip_address: 127.0.0.1
+rabbitmq_conf_node_port: 5672
+
+rabbitmq_users: []
